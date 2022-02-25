@@ -21,10 +21,10 @@ export class FortyTwoStrategyStrategy extends PassportStrategy(Strategy) {
     profile: any,
     cb: VerifyCallback,
   ): Promise<any> {
-    // console.log(profile);
-    // console.log('acces token' + accessToken);
-    // console.log('refresh token' + refreshToken);
-    return { user: 'salam' };
-    // return await this.authService.validateUser(profile);
+    const user = {
+      id: profile.id,
+      login: profile.username,
+    };
+    return user;
   }
 }

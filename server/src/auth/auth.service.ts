@@ -1,14 +1,18 @@
 import { Injectable } from '@nestjs/common';
+// import { UsersService } from '../users/users.service';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  FortyTwoStrategyLogin(req) {
-    if (!req.user) {
-      return 'No User from 42';
-    }
-    return {
-      message: 'user information from 42',
-      user: req.user,
-    };
+  constructor(
+    // private usersService: UsersService,
+    private jwtService: JwtService,
+  ) {}
+
+  login(user: any) {
+    // console.log('===> ' + user.login);
+    const payload = { login: user.login, sub: user.id };
+    console.log(this.jwtService.sign(payload));
+    return this.jwtService.sign(payload);
   }
 }

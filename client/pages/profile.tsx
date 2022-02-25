@@ -1,12 +1,13 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+
 const Home: NextPage = () => {
   const router = useRouter();
-  // useEffect(() => {
-  // router.push("/login");
-  // }, []);
-  return <div>index</div>;
+  useEffect(() => {
+    router.push("/login");
+  }, []);
+  return <div>salam oussama</div>;
 };
 
 export default Home;

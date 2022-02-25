@@ -1,12 +1,12 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-const Home: NextPage = () => {
+const error: NextPage = () => {
   const router = useRouter();
   // useEffect(() => {
   // router.push("/login");
   // }, []);
-  return <div>index</div>;
+  return <h1>401 Unauthorized</h1>;
 };
 
-export default Home;
+export default error;
