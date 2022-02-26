@@ -8,16 +8,9 @@ export default function Home() {
       await api
         .get("http://localhost:3001/profile")
         .then((res) => {
-          console.log("kayne a sat");
+          if(res.data === false)
+              router.push("/login");
         })
-        .catch((err) => {
-          console.log(err);
-          setTimeout(() => {
-            router.push("/404");
-          }, 10000);
-        });
-      // console.log(profile);
-      // return profile;
     };
     getData();
     // console.log(getData);

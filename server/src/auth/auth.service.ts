@@ -12,7 +12,6 @@ export class AuthService {
   login(user: any) {
     // console.log('===> ' + user.login);
     const payload = { login: user.login, sub: user.id };
-    console.log(this.jwtService.sign(payload));
     return this.jwtService.sign(payload);
   }
 }
