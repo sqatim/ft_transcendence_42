@@ -1,9 +1,9 @@
-export class CreateUserDto{
-    id: string;
+export class CreateUserDto {
+  id: number;
 
-    password: string;
+  password: string;
 
-    username: string;
+  username: string;
 
-    avatar: string;
+  avatar: string;
 }

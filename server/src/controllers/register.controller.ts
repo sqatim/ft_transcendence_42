@@ -9,7 +9,7 @@ export class RegisterController {
     
     @Get()
     async register(@Req() req, @Body() createCatDto: CreateUserDto) {
-        const user: User  = {id: '60', username: 'sqatim', avatar: 'dsadsa', friend: []};
+        const user: User  = {...createCatDto, friend: []};
         this.dataService.save(user);
         return (createCatDto);
     }

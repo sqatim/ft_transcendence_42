@@ -1,10 +1,10 @@
-import { Column, Entity, OneToMany, JoinColumn, PrimaryColumn } from 'typeorm';
+import { Column, Entity, OneToMany, JoinColumn, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 import { Friend } from '../../core/entities/friend.entity';
 
 @Entity()
 export class User {
-  @PrimaryColumn()
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
   @Column({nullable: true})
   password?: string;

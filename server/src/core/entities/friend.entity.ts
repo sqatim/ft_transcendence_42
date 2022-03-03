@@ -1,16 +1,9 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryColumn,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from './user.entity';
 
 @Entity()
 export class Friend {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   id: number;
 
   @ManyToOne((type) => User, (user) => user.friend)
