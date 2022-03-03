@@ -6,8 +6,8 @@ export class User {
   @PrimaryColumn()
   id: string;
 
-  @Column()
-  password: string;
+  @Column({nullable: true})
+  password?: string;
 
   @Column()
   username: string;

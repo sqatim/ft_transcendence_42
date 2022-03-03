@@ -1,21 +1,13 @@
-import {
-  Controller,
-  Get,
-  Res,
-  Req,
-  UseGuards,
-  Post,
-  Redirect,
-} from '@nestjs/common';
+import { Controller, Get, Res, Req, Post,UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { FortyTwoStrategyAuthGuard } from '../frameworks/auth/o-auth/42-auth.guard';
-import { DataService } from '../services/data-services/dataService.service';
-import { JwtAuthGuard } from '../frameworks/auth/jwt/jwt-auth.guard';
-import { LocalStrategy } from 'src/frameworks/auth/local/local.strategy';
+import { DataServicesService } from 'src/services/data-services/data-services.service';
+// import { JwtAuthGuard } from '../frameworks/auth/jwt/jwt-auth.guard';
+import { LocalStrategy } from '../frameworks/auth/local/local.strategy';
 
 @Controller('login')
-export class AppController {
-  constructor(private readonly dataService: DataService) {}
+export class LoginController {
+  constructor(private readonly dataService: DataServicesService) {}
 
   @Get('intra-42')
   @UseGuards(FortyTwoStrategyAuthGuard)
@@ -28,9 +20,9 @@ export class AppController {
     return res.redirect(`http://localhost:3000/loginSuccess?token=${token}`);
   }
 
-  @Post('local')
-  @UseGuards(LocalStrategy)
-  async login(@Req() req) {
-    return req.user;
-  }
+    @Post('local')
+    @UseGuards(LocalStrategy)
+    async login(@Req() req) {
+      return req.user;
+    }
 }

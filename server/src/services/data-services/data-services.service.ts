@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { UserService } from '../../services/use-cases/user/user.service';
+import { UserService } from '../use-cases/user/user.service';
 import { JwtService } from '@nestjs/jwt';
+import { User } from 'src/core/entities/user.entity';
 
 @Injectable()
-export class DataService {
+export class DataServicesService {
   constructor(
     private usersService: UserService,
     private jwtService: JwtService,
@@ -17,7 +18,12 @@ export class DataService {
     }
     return null;
   }
-
+  async save(newUser : User)
+  {
+    const user = await this.usersService.findOne(newUser.username);
+    if(!user)
+      this.usersService.save(newUser)
+  }
   login(user: any) {
     const payload = { login: user.login, sub: user.id };
     return this.jwtService.sign(payload);

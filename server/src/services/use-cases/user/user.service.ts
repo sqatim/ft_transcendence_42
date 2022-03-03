@@ -21,4 +21,8 @@ export class UserService {
   async remove(id: string): Promise<void> {
     await this.usersRepository.delete(id);
   }
+  save(user: User): Promise<any>{
+    // console.log(user);
+    return this.usersRepository.save(user);
+  }
 }
