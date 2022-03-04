@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from '../../../core/entities/user.entity'
+import { User } from '../../../core/entities/user.entity';
 
 @Injectable()
 export class UserService {
@@ -15,14 +15,18 @@ export class UserService {
   }
 
   findOne(id: string): Promise<User> {
+    return this.usersRepository.findOne({ username: id });
+  }
+
+  findOneById(id: number): Promise<User> {
     return this.usersRepository.findOne(id);
   }
 
-  async remove(id: string): Promise<void> {
+  async remove(id: number): Promise<void> {
     await this.usersRepository.delete(id);
   }
-  
-  save(user: User): Promise<any>{
+
+  save(user: User): Promise<any> {
     // console.log(user);
     return this.usersRepository.save(user);
   }

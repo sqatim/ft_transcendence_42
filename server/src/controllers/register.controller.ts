@@ -5,12 +5,20 @@ import { DataServicesService } from 'src/services/data-services/data-services.se
 
 @Controller('register')
 export class RegisterController {
-    constructor(private readonly dataService: DataServicesService){}
-    
-    @Get()
-    async register(@Req() req, @Body() createCatDto: CreateUserDto) {
-        const user: User  = {...createCatDto, friend: []};
-        this.dataService.save(user);
-        return (createCatDto);
-    }
+  constructor(private readonly dataService: DataServicesService) {}
+
+  @Post()
+  async register(@Req() req, @Body() createCatDto: CreateUserDto) {
+    // const user: User = {
+    //   id: 1,
+    //   username: 'usernane',
+    //   avatar: 'avatar',
+    //   password: 'password',
+    //   friend: [],
+    // };
+    const user: User = { ...createCatDto, friend: [] };
+    console.log(user);
+    this.dataService.save(user);
+    return createCatDto;
+  }
 }
