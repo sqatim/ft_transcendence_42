@@ -14,6 +14,10 @@ export class FriendService {
     return this.friendsRepository.find();
   }
 
+  // findAllByUserId(id: number) {
+  //   return this.friendsRepository.find({user : id});
+  // }
+
   // findAllOfUser():  Promise<Friend[]> {
   //     // return this.friendsRepository.find({userId :});
   // }
@@ -25,7 +29,7 @@ export class FriendService {
     await this.friendsRepository.delete(id);
   }
 
-  save(friend: Friend): Promise<any> {
+  save(friend: Friend): Promise<Friend> {
     // console.log(user);
     return this.friendsRepository.save(friend);
   }

@@ -18,8 +18,12 @@ export class UserService {
     return this.usersRepository.findOne({ username: id });
   }
 
-  findOneById(id: number): Promise<User> {
-    return this.usersRepository.findOne(id);
+  async findOneById(id: number): Promise<User> {
+    return await this.usersRepository.findOne(id);
+  }
+
+  async findOneByIdWithRelation(id: number, relation: Object): Promise<User> {
+    return await this.usersRepository.findOne(id, relation);
   }
 
   async remove(id: number): Promise<void> {

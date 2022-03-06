@@ -7,8 +7,8 @@ export class Friend {
   id?: number;
 
   @ManyToOne((type) => User, (user) => user.friend)
-  user: number;
+  user: User;
 
   @Column()
-  idFriend: number;
+  friend: number;
 }

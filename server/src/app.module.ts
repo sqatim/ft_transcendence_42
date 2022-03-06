@@ -9,6 +9,7 @@ import { LoginController } from './controllers/login.controller';
 import { ProfileController } from './controllers/profile.controller';
 import { RegisterController } from './controllers/register.controller';
 import { UsersController } from './controllers/users.controller';
+import { StatsModule } from './services/use-cases/stats/stats.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { UsersController } from './controllers/users.controller';
     DataServicesModule,
     PostgresModule,
     AuthModule,
+    StatsModule,
   ],
   controllers: [AppController, LoginController, ProfileController, RegisterController, UsersController],
 })
