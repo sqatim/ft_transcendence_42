@@ -1,9 +1,24 @@
-import { Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Req,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
+import { AnyFilesInterceptor, FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
 import { Friend } from 'src/core/entities/friend.entity';
 import { User } from 'src/core/entities/user.entity';
 import { DataServicesService } from 'src/services/data-services/data-services.service';
 import { FriendService } from 'src/services/use-cases/friend/friend.service';
 import { UserService } from 'src/services/use-cases/user/user.service';
+import { v4 as uuidv4 } from 'uuid';
+import path = require('path');
+import { Observable, of } from 'rxjs';
+import { saveImageToStorage } from 'src/services/helpers/image-storage';
 
 @Controller('users')
 export class UsersController {
@@ -28,6 +43,11 @@ export class UsersController {
     return this.usersService.remove(id);
   }
 
+  @Post('avatar')
+  @UseInterceptors(FileInterceptor('file', saveImageToStorage))
+  uploadAvatar(@UploadedFile() file: Express.Multer.File): Observable<Object> {
+    return of({ imagePath: file.filename });
+  }
   // @Get(':id/friends')
   // async findAllFriends(@Param('id') id: number) {
   //   return this.dataService.findAllFriendOfUser(id);
