@@ -40,12 +40,18 @@ export class DataService {
     return friends;
   }
 
-  async addFriend(userId: number, friendId: number)
-  {
+  async addFriend(userId: number, friendId: number) {
     let newUser: User;
     await this.usersService
       .findOneByIdWithRelation(userId, { relations: ['friend'] })
-      .then((data) => (newUser = data)); // hna jabt data dyal user bal friends dyalo
+      .then((data) => {
+        newUser = data;
+        // console.log(newUser);
+      }); // hna jabt data dyal user bal friends dyalo
+    if (newUser.friend.find((element) => element.friend == friendId)) {
+      console.log('friend is already in the list');
+      return { error: 'friend is already in the list' };
+    }
     await this.friendsService.save(friendId, newUser).then((data) => {
       newUser.friend.push(data);
     });
@@ -66,11 +72,15 @@ export class DataService {
     } else console.log('wala a sahbi ma blansh');
   }
 
-  updateStats()
-  {
-
+  updateStats(id: number, type: string) {
+    switch (type) {
+      case 'win':
+        return this.statsService.updateWins(id);
+      case 'lose':
+        return this.statsService.updateLoses(id);
+    }
   }
-  
+
   login(user: any) {
     const payload = { login: user.login, sub: user.id };
     return this.jwtService.sign(payload);

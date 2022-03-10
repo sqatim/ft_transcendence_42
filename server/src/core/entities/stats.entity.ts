@@ -15,6 +15,8 @@ export class Stats {
     this.loses = 0;
     this.rank = 'iron';
     this.honor = 0;
+    this.xp = 0;
+    this.xpForLevel = 5;
   }
 
   @PrimaryGeneratedColumn()
@@ -26,6 +28,12 @@ export class Stats {
 
   @Column()
   level: number;
+
+  @Column()
+  xpForLevel: number;
+
+  @Column()
+  xp: number;
 
   @Column()
   wins: number;

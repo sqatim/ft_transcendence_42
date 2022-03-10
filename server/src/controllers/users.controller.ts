@@ -9,8 +9,7 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
-import { AnyFilesInterceptor, FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { Friend } from 'src/core/entities/friend.entity';
 import { User } from 'src/core/entities/user.entity';
 import { DataService } from 'src/services/data/data.service';
@@ -42,9 +41,24 @@ export class UsersController {
     return this.usersService.findOne(id);
   }
 
-  @Delete(':id')
-  removeUser(@Param('id') id: number) {
-    return this.usersService.remove(id);
+  @Get(':id/friends')
+  async findAllFriends(@Param('id') id: number) {
+    return await this.usersService.findOneById(id).then((user) => {
+      return this.dataService.findAllFriendOfUser(user);
+    });
+  }
+
+  @Get(':id/stats')
+  async findStatsOfUser(@Param('id') id: number) {
+    return this.dataService.findStatsOfUser(id);
+  }
+
+  @Post(':id/friends/:friendId')
+  async findAllFriend(
+    @Param('id') userId: number,
+    @Param('friendId') friendId: number,
+  ) {
+    this.dataService.addFriend(userId, friendId);
   }
 
   @Put(':id/avatar')
@@ -58,31 +72,13 @@ export class UsersController {
     return { succes: 'avatar is updated' };
   }
 
-  @Get(':id/friends')
-  async findAllFriends(@Param('id') id: number) {
-    return await this.usersService.findOneById(id).then((user) => {
-      return this.dataService.findAllFriendOfUser(user);
-    });
-  }
-
-  @Get(':id/stats')
-  async findStatsOfUser(@Param('id') id: number) {
-    return this.dataService.findStatsOfUser(id);
-  }
-
   @Put(':id/stats/:stat')
-  async updateStats(
-    @Param('id') id: number,
-    @Param('stat') stat: string,
-  ) {
-    return this.dataService.updateStats() // khasni n9ad hadi
+  async updateStats(@Param('id') id: number, @Param('stat') stat: string) {
+    return this.dataService.updateStats(id, stat); // khasni n9ad hadi
   }
 
-  @Post(':id/friends/:friendId')
-  async findAllFriend(
-    @Param('id') userId: number,
-    @Param('friendId') friendId: number,
-  ) {
-    return this.dataService.addFriend(userId, friendId);
+  @Delete(':id')
+  removeUser(@Param('id') id: number) {
+    return this.usersService.remove(id);
   }
 }
