@@ -30,6 +30,9 @@ export class UserService {
     await this.usersRepository.delete(id);
   }
 
+  async updateAvatar(id: number, path: string) {
+    await this.usersRepository.update(id, { avatar: path });
+  }
   save(user: User): Promise<any> {
     // console.log(user);
     return this.usersRepository.save(user);

@@ -10,8 +10,24 @@ export class StatsService {
     private statsRepository: Repository<Stats>,
   ) {}
 
+
+  findAll(): Promise<Stats[]> {
+    return this.statsRepository.find();
+  }
+
   async findOneByIdOfUser(id: number) {
     return await this.statsRepository.find({ user: id });
+  }
+
+  async findOneById(id: number) {
+    return await this.statsRepository.findOne(id);
+  }
+
+  async updateStats(type: string)
+  {
+    switch (type){
+      case
+    }
   }
 
   save(stats: Stats): Promise<any> {

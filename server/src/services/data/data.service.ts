@@ -7,7 +7,7 @@ import { StatsService } from '../use-cases/stats/stats.service';
 import { Stats } from 'src/core/entities/stats.entity';
 
 @Injectable()
-export class DataServicesService {
+export class DataService {
   constructor(
     private usersService: UserService,
     private statsService: StatsService,
@@ -24,25 +24,38 @@ export class DataServicesService {
     return null;
   }
 
-  // async findAllFriendOfUser(idUser: number) {
-  //   let id: number[];
-  //   let friends: User[] = [];
-  //   await this.friendsService.findAllByUserId(idUser).then((data) => {
-  //     id = data.map((element) => element.idFriend);
-  //   });
+  async findAllFriendOfUser(user: User) {
+    let id: number[];
+    let friends: User[] = [];
+    await this.friendsService.findAllByUser(user).then((data) => {
+      id = data.map((element) => element.friend);
+    });
+    await Promise.all(
+      id.map(async (element) => {
+        await this.usersService
+          .findOneById(element)
+          .then((element) => friends.push(element));
+      }),
+    );
+    return friends;
+  }
 
-  //   await Promise.all(
-  //     id.map(async (element) => {
-  //       await this.usersService
-  //         .findOneById(element)
-  //         .then((element) => friends.push(element));
-  //       // console.log('salam');
-  //     }),
-  //   );
-  //   console.log(friends);
-  //   return friends;
-  // }
-  
+  async addFriend(userId: number, friendId: number)
+  {
+    let newUser: User;
+    await this.usersService
+      .findOneByIdWithRelation(userId, { relations: ['friend'] })
+      .then((data) => (newUser = data)); // hna jabt data dyal user bal friends dyalo
+    await this.friendsService.save(friendId, newUser).then((data) => {
+      newUser.friend.push(data);
+    });
+    return this.usersService.save(newUser);
+  }
+
+  async findStatsOfUser(id: number) {
+    return this.statsService.findOneByIdOfUser(id);
+  }
+
   async save(newUser: User) {
     let result: any = await this.usersService.findOne(newUser.username);
     if (!result) {
@@ -53,6 +66,11 @@ export class DataServicesService {
     } else console.log('wala a sahbi ma blansh');
   }
 
+  updateStats()
+  {
+
+  }
+  
   login(user: any) {
     const payload = { login: user.login, sub: user.id };
     return this.jwtService.sign(payload);
