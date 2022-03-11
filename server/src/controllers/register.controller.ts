@@ -10,26 +10,10 @@ export class RegisterController {
 
   @Post()
   async register(@Req() req, @Body() createCatDto: CreateUserDto) {
-    // const user: User = {
-    //   id: 1,
-    //   username: 'usernane',
-    //   avatar: 'avatar',
-    //   password: 'password',
-    //   friend: [],
-    // };
-    // const stats: Stats = {
-    //   // id: 0,
-    //   // user: 1,
-    //   level: 0,
-    //   wins: 0,
-    //   loses: 0,
-    //   rank: 'iron',
-    //   honor: 0,
-    // };
-    
     const user: User = { ...createCatDto, friend: [] };
     console.log(user);
     this.dataService.save(user);
+    console.log("wa sat");
     return createCatDto;
   }
 }

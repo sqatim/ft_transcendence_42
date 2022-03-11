@@ -7,6 +7,7 @@ import {
   Put,
   Req,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -22,6 +23,7 @@ import {
   saveImageToStorage,
   fullImagePath,
 } from 'src/services/helpers/image-storage';
+import { JwtAuthGuard } from 'src/frameworks/auth/jwt/jwt-auth.guard';
 
 @Controller('users')
 export class UsersController {
@@ -34,6 +36,20 @@ export class UsersController {
   @Get()
   findAllUsers() {
     return this.usersService.findAll();
+  }
+
+  @Get('me/stats')
+  @UseGuards(JwtAuthGuard)
+  async findMyStats(@Req() req) {
+    return this.dataService.findStatsOfUser(req.user.id);
+  }
+
+  @Get('me/friends')
+  @UseGuards(JwtAuthGuard)
+  async findMyFriends(@Req() req) {
+    return await this.usersService.findOneById(req.user.id).then((user) => {
+      return this.dataService.findAllFriendOfUser(user);
+    });
   }
 
   @Get(':id')
@@ -49,7 +65,9 @@ export class UsersController {
   }
 
   @Get(':id/stats')
+  @UseGuards(JwtAuthGuard)
   async findStatsOfUser(@Param('id') id: number) {
+    // console.log('fen a jemi');
     return this.dataService.findStatsOfUser(id);
   }
 

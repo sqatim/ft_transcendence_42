@@ -2,6 +2,7 @@ import { Strategy } from 'passport-local';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { DataService } from 'src/services/data/data.service';
+
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
   // constructor() {
@@ -10,11 +11,10 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(username: string, password: string): Promise<any> {
-    // const user = {};
     const user = await this.dataService.validateUser(username, password);
     if (!user) {
       throw new UnauthorizedException();
     }
-    return user;
+    return this.dataService.login(user);
   }
 }

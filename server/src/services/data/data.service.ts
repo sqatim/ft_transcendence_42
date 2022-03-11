@@ -82,7 +82,7 @@ export class DataService {
   }
 
   login(user: any) {
-    const payload = { login: user.login, sub: user.id };
+    const payload = { username: user.username, sub: user.id };
     return this.jwtService.sign(payload);
   }
 }

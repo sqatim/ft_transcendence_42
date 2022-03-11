@@ -22,7 +22,7 @@ export class Stats {
   @PrimaryGeneratedColumn()
   id?: number;
 
-  @OneToOne(() => User, (user) => user.stats)
+  @OneToOne(() => User, (user) => user.stats, { onDelete: 'CASCADE' })
   @JoinColumn()
   user?: number;
 
