@@ -41,21 +41,27 @@ export class DataService {
   }
 
   async addFriend(userId: number, friendId: number) {
-    let newUser: User;
-    await this.usersService
-      .findOneByIdWithRelation(userId, { relations: ['friend'] })
-      .then((data) => {
-        newUser = data;
-        // console.log(newUser);
-      }); // hna jabt data dyal user bal friends dyalo
-    if (newUser.friend.find((element) => element.friend == friendId)) {
-      console.log('friend is already in the list');
-      return { error: 'friend is already in the list' };
+    try {
+      let newUser: User;
+      await this.usersService.findOneById(friendId).then((element) => {
+        if (element === undefined) throw undefined;
+      });
+      await this.usersService
+        .findOneByIdWithRelation(userId, { relations: ['friend'] })
+        .then((data) => {
+          newUser = data;
+        }); // hna jabt data dyal user bal friends dyalo
+      if (newUser.friend.find((element) => element.friend == friendId)) {
+        console.log('friend is already in the list');
+        return { error: 'friend is already in the list' };
+      }
+      await this.friendsService.save(friendId, newUser).then((data) => {
+        newUser.friend.push(data);
+      });
+      this.usersService.save(newUser).then((element) => element);
+    } catch (err) {
+      return 'salam';
     }
-    await this.friendsService.save(friendId, newUser).then((data) => {
-      newUser.friend.push(data);
-    });
-    return this.usersService.save(newUser);
   }
 
   async findStatsOfUser(id: number) {
@@ -63,12 +69,15 @@ export class DataService {
   }
 
   async save(newUser: User) {
-    let result: any = await this.usersService.findOne(newUser.username);
+    let result: any = await this.usersService.findOneById(newUser.id);
     if (!result) {
+      console.log('samir');
       const user = await this.usersService.save(newUser);
+      console.log(user);
       const stats = new Stats();
       stats.user = user;
       await this.statsService.save(stats);
+      console.log('tsayva a sahbi');
     } else console.log('wala a sahbi ma blansh');
   }
 

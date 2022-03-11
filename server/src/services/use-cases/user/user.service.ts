@@ -15,7 +15,10 @@ export class UserService {
   }
 
   findOne(id: string): Promise<User> {
-    return this.usersRepository.findOne({ username: id }, {relations : ['friend']});
+    return this.usersRepository.findOne(
+      { username: id },
+      { relations: ['friend'] },
+    );
     // return this.usersRepository.findOne({ username: id });
   }
 
@@ -33,6 +36,10 @@ export class UserService {
 
   async updateAvatar(id: number, path: string) {
     await this.usersRepository.update(id, { avatar: path });
+  }
+
+  async updateUsername(id: number, newUsername: string) {
+    await this.usersRepository.update(id, { username: newUsername });
   }
   save(user: User): Promise<any> {
     // console.log(user);

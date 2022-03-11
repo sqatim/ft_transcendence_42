@@ -34,8 +34,16 @@ export class UsersController {
   ) {}
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   findAllUsers() {
     return this.usersService.findAll();
+  }
+
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  async findMyData(@Req() req) {
+    console.log('samir');
+    return this.usersService.findOneById(req.user.id);
   }
 
   @Get('me/stats')
@@ -69,6 +77,25 @@ export class UsersController {
   async findStatsOfUser(@Param('id') id: number) {
     // console.log('fen a jemi');
     return this.dataService.findStatsOfUser(id);
+  }
+
+  // Post
+
+  @Post('me/updateProfile')
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(FileInterceptor('file', saveImageToStorage))
+  uploadProfile(@UploadedFile() file: Express.Multer.File, @Req() req): Object {
+    console.log(req.user);
+    // if (!file) return of({ error: 'haram walah haram' });
+    // this.usersService.updateAvatar(req.user.id, fullImagePath(file.filename));
+    this.usersService.updateUsername(req.user.id, 'sqatim');
+    return { succes: 'Profile is updated' };
+  }
+
+  @Post('me/friends/:friendId')
+  @UseGuards(JwtAuthGuard)
+  async addNewFriend(@Req() req, @Param('friendId') friend: number) {
+    return this.dataService.addFriend(req.user.id, friend);
   }
 
   @Post(':id/friends/:friendId')
